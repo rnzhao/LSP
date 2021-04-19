@@ -330,12 +330,11 @@ class LspCodeActionsCommand(LspTextCommand):
         window = self.view.window()
         if not window:
             return
-        items, selected_index = format_code_actions_for_quick_panel(actions)
-        window.show_quick_panel(
+        code_actions = [action[1] for action in actions]
+        items = [code_action["title"] for code_action in code_actions]
+        self.view.show_popup_menu(
             items,
-            lambda i: self._handle_select(i, actions),
-            selected_index=selected_index,
-            placeholder="Code action")
+            lambda i: self._handle_select(i, actions))
 
     def _handle_select(self, index: int, actions: List[Tuple[ConfigName, CodeActionOrCommand]]) -> None:
         if index == -1:

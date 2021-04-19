@@ -340,13 +340,10 @@ class LspHoverCommand(LspTextCommand):
             if len(actions) > 1:
                 window = self.view.window()
                 if window:
-                    items, selected_index = format_code_actions_for_quick_panel(
-                        map(lambda action: (config_name, action), actions))
-                    window.show_quick_panel(
+                    items = [code_action["title"] for code_action in actions]
+                    self.view.show_popup_menu(
                         items,
-                        lambda i: self.handle_code_action_select(config_name, actions, i),
-                        selected_index=selected_index,
-                        placeholder="Code actions")
+                        lambda i: self.handle_code_action_select(config_name, actions, i))
             else:
                 self.handle_code_action_select(config_name, actions, 0)
         elif href == "quick-panel:DocumentLink":
